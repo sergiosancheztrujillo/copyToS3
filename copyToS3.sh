@@ -8,9 +8,10 @@
 
 
 display_help() {
-    echo "Usage: $0 <source folder> <S3 bucket>"
+    echo "Usage: $0 <source folder> <S3 bucket> {noremove | remove})"
     echo
-    echo "   The command is executed with --recursive flag "
+    echo "   remove | noremove : remove or not, files from origin after copy"
+    echo "   The aws command is executed with --recursive flag "
 
     exit 1
 }
@@ -22,15 +23,21 @@ else
     echo "Local folder: $LOCAL_FOLDER"
     S3_BUCKET=$2
     echo "S3 Bucket: $S3_BUCKET"
+    if [[ $3 == "noremove" ]] ; then
+        REMOVE=0
+    else
+        REMOVE=1
+    fi
+    echo $REMOVE
 
-    if [[ aws s3 ls $S3_BUCKET ]] ; then
-        echo "Copying logs files to S3://logfiles"
-        if [[ aws s3 cp $LOCAL_FOLDER $S3_BUCKET --recursive ]] ; then
-            echo "Copied !!"
-            echo "Removing files"
+    # Firt check if bucket exists
+    if aws s3 ls $S3_BUCKET ; then
+        if aws s3 cp $LOCAL_FOLDER $S3_BUCKET --recursive ; then
+            echo "Files copied !!"
             rm -rf "$LOCAL_FOLDER"*
+            echo "File remove from local source"
         else
-            echo "OHHH Failed copy to S3 bucket"
+            echo "Ups!!, Fail to copy to S3 bucket"
         fi
     else
         echo "Bucket doesnt exists"
