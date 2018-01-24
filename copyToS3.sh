@@ -23,19 +23,17 @@ else
     echo "Local folder: $LOCAL_FOLDER"
     S3_BUCKET=$2
     echo "S3 Bucket: $S3_BUCKET"
-    if [[ $3 == "noremove" ]] ; then
-        REMOVE=0
-    else
-        REMOVE=1
-    fi
-    echo $REMOVE
 
     # Firt check if bucket exists
     if aws s3 ls $S3_BUCKET ; then
         if aws s3 cp $LOCAL_FOLDER $S3_BUCKET --recursive ; then
             echo "Files copied !!"
-            rm -rf "$LOCAL_FOLDER"*
-            echo "File remove from local source"
+            if $3 == "remove" ; then
+                rm -rf "$LOCAL_FOLDER"*
+                echo "Files removed from local source"
+            else
+                echo "Files don't removed"
+            fi
         else
             echo "Ups!!, Fail to copy to S3 bucket"
         fi
