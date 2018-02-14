@@ -28,7 +28,7 @@ else
     if aws s3 ls $S3_BUCKET ; then
         if aws s3 cp $LOCAL_FOLDER $S3_BUCKET --recursive ; then
             echo "Files copied !!"
-            if $3 == "remove" ; then
+            if [[ $3 == "remove" ]] ; then
                 rm -rf "$LOCAL_FOLDER"*
                 echo "Files removed from local source"
             else
