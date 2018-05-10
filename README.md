@@ -1,2 +1,2 @@
 # copyToS3
-Copy files to S3 buckets
+Copy logs files to S3 bucket (basebone.backups.logs)
