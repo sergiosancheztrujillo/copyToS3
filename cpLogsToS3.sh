@@ -14,7 +14,7 @@ move_files(){
     year=$(echo $1 | awk -F"/" '{print $5}')
     echo "Moving Year: ${year}"
     echo "Old days: $2"
-    find /remote/backups/logbackup/${year}/ -mtime +$2 -exec aws s3 mv {} s3://basebone.logs/$HOSTNAME/${year}/  \;
+    find /remote/backups/logbackup/${year}/ -mtime +$2 -exec aws s3 mv {} s3://basebone.backups.logs/$HOSTNAME/${year}/  \;
 
 }
 
@@ -22,7 +22,7 @@ copy_files(){
     year=$(echo $1 | awk -F"/" '{print $5}')
     echo "Copying Year: ${year}"
     echo "Old days: $2"
-    find /remote/backups/logbackup/${year}/ -mtime +$2 -exec aws s3 cp {} s3://basebone.logs/$HOSTNAME/${year}/  \;
+    find /remote/backups/logbackup/${year}/ -mtime +$2 -exec aws s3 cp {} s3://basebone.backups.logs/$HOSTNAME/${year}/  \;
 
 }
 
